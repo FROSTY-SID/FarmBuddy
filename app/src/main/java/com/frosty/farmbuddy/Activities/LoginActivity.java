@@ -57,6 +57,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        intentForMainActivity = new Intent(this, MainActivity.class);
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            startActivity(intentForMainActivity);
+            finish();
+        }
 
         mLogin = (Button) findViewById(R.id.bt_Login);
         mVerify = (Button) findViewById(R.id.bt_verify);
@@ -68,7 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         mLinearLayLogin = (LinearLayout) findViewById(R.id.lineraLay_login_input);
         mLinearLayLoginVerify = (LinearLayout) findViewById(R.id.LinearLay_LoginVerify);
         mResendOtp = (TextView) findViewById(R.id.tv_resend_OTP);
-        intentForMainActivity = new Intent(this, MainActivity.class);
+
+
+
         if(FLAG_PHONEVERFIY){
             mLinearLayLoginVerify.setVisibility(View.VISIBLE);
             mLinearLayLogin.setVisibility(View.GONE);
@@ -129,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
 
                             FirebaseUser user = task.getResult().getUser();
+
                             Log.d(TAG,user.getPhoneNumber().toString());
                             //TODO: Open The MainActivity and Send User object to That Activity
                             startActivity(intentForMainActivity);
