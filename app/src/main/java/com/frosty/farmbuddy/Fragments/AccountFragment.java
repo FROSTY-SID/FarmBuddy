@@ -105,7 +105,7 @@ public class AccountFragment extends Fragment {
         mTextViewName.setText(user!=null?user.getDisplayName():"...");
         mTextViewPhone.setText(user!=null?user.getPhoneNumber():"...");
 
-        mTextViewUpdateInfo.setOnClickListener(new View.OnClickListener() {
+       /* mTextViewUpdateInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -115,6 +115,14 @@ public class AccountFragment extends Fragment {
                         .replace(R.id.empty_activity_layout_for_fragment, new UpdateAccountFragment())
                         .commit();
 
+            }
+        });*/
+
+       //Temporary
+        mTextViewUpdateInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                auth.signOut();
             }
         });
 
