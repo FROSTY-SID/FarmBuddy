@@ -6,8 +6,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="text_mobile_number">Mobile no.</string>
-    <string name="text_login">Login</string>
-    <string name="text_user_reg">User Registration</string>
+    <string name="text_login">Log in</string>
+    <string name="text_user_reg">Not registered yet? </string>
+    <string name="text_register_here">Register here. </string>
     <string name="text_verify">Verify</string>
     <string name="text_Verification_code">Verification Code</string>
     <string name="text_resendOTP">Resend OTP</string>
@@ -16,4 +17,23 @@
     <string name="text_close">Close</string>
     <string name="text_invalid_Req">Invalid Request</string>
     <string name="text_Enter_Manually">Enter the OTP from Message</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_my_account">My Account</string>
+    <string name="nav_sell">Sell</string>
+    <string name="nav_category">Shop by Category</string>
+    <string name="nav_info">Information</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_Account_fragment">Hello Account fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_name">Name</string>
+    <string name="text_email">Email</string>
+    <string name="text_save">Save</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="text_register">Register</string>
+    <string name="text_pincode">Pin code</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>

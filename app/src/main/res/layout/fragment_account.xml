@@ -1,0 +1,44 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.frosty.farmbuddy.Fragments.AccountFragment">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_account_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_account_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_account_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_account_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+        <!--
+            This textView is temporary. Should be replaced
+            with vector of edit
+        -->
+    <TextView
+        android:id="@+id/tv_update_accinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update info"/>
+
+</LinearLayout>
+
+
+</FrameLayout>

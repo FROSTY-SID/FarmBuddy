@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frosty.farmbuddy.MainActivity;
+import com.frosty.farmbuddy.Objects.Location_fb;
+import com.frosty.farmbuddy.Objects.User;
 import com.frosty.farmbuddy.R;
 import com.frosty.farmbuddy.Utility.Converter;
 import com.frosty.farmbuddy.Utility.FarmBuddyValues;
@@ -31,6 +34,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.frosty.farmbuddy.Activities.UserRegistrationActivity;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,27 +59,41 @@ public class LoginActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private String PHONE_VER_FLAG_TAG = "PHONE_VER_FLAG";
     private boolean FLAG_PHONEVERFIY = false;
-    private String TAG = "LOGINACTIVITY";
+    private String LOG_TAG = "LOGINACTIVITY";
     private FirebaseAuth mAuth;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private Intent intentForMainActivity ;
+    private final int ACTIVITY_CONSTANT = 1;
+    private Intent dataFromReg;
+    private DatabaseReference mDatabase;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        intentForMainActivity = new Intent(this, MainActivity.class);
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            startActivity(intentForMainActivity);
+            finish();
+        }
 
         mLogin = (Button) findViewById(R.id.bt_Login);
         mVerify = (Button) findViewById(R.id.bt_verify);
         mMobileNumber = (EditText) findViewById(R.id.et_phone);
         mVerificationCode = (EditText) findViewById(R.id.et_verification_code);
         mUserRegistration =(TextView) findViewById(R.id.tv_user_reg);
+        mUserRegistration.setText(Html.fromHtml(getString(R.string.text_user_reg)+" "+"<font color='#18ecb7'><b>"+getString(R.string.text_register_here)+"</b></font>"));
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.GONE);
         mLinearLayLogin = (LinearLayout) findViewById(R.id.lineraLay_login_input);
         mLinearLayLoginVerify = (LinearLayout) findViewById(R.id.LinearLay_LoginVerify);
         mResendOtp = (TextView) findViewById(R.id.tv_resend_OTP);
-        intentForMainActivity = new Intent(this, MainActivity.class);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         if(FLAG_PHONEVERFIY){
             mLinearLayLoginVerify.setVisibility(View.VISIBLE);
             mLinearLayLogin.setVisibility(View.GONE);
@@ -92,7 +117,23 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //Verify mobile Number
                 else{
-                    verifyPhoneNumber();
+                    mDatabase.child("users").orderByChild("phone").equalTo(mMobileNumber.getText().toString()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue()==null){
+                                Log.d("TEST","onDataChange=>"+dataSnapshot.toString());
+                                startActivityForResult(new Intent(getApplicationContext(),UserRegistrationActivity.class),ACTIVITY_CONSTANT);
+                            }else{
+                                verifyPhoneNumber(mMobileNumber.getText().toString());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
         });
@@ -111,11 +152,20 @@ public class LoginActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mLinearLayLogin.setVisibility(View.GONE);
                 mLinearLayLoginVerify.setVisibility(View.GONE);
-                verifyPhoneNumber();
+                verifyPhoneNumber(mMobileNumber.getText().toString());
+
+            }
+        });
+
+        mUserRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(getApplicationContext(),UserRegistrationActivity.class),ACTIVITY_CONSTANT);
             }
         });
 
     }
+
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
        if(credential!=null){
@@ -126,23 +176,74 @@ public class LoginActivity extends AppCompatActivity {
                         FLAG_PHONEVERFIY = false;
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                            Log.d(LOG_TAG, "signInWithCredential:success");
 
                             FirebaseUser user = task.getResult().getUser();
-                            Log.d(TAG,user.getPhoneNumber().toString());
+
+                            //Result from UserRegistration Activity is not NULL i.e New User has registered
+                            if(dataFromReg!=null){
+                                if(dataFromReg.hasExtra(UserRegistrationActivity.FIRST_NAME_KEY)&&
+                                        dataFromReg.hasExtra(UserRegistrationActivity.LAST_NAME_KEY)){
+
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(dataFromReg.getStringExtra(UserRegistrationActivity.FIRST_NAME_KEY)+
+                                                    " "+
+                                                    dataFromReg.getStringExtra(UserRegistrationActivity.LAST_NAME_KEY))
+                                            .build();
+
+                                    user.updateProfile(profileUpdates)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Log.d(LOG_TAG, "User profile updated.");
+                                                    }
+                                                }
+                                            });
+                                    if(!dataFromReg.getStringExtra(UserRegistrationActivity.EMAIL_KEY).equals(" ")){
+                                        user.updateEmail(dataFromReg.getStringExtra(UserRegistrationActivity.EMAIL_KEY))
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Log.d(LOG_TAG, "User email address updated.");
+                                                        }
+                                                    }
+                                                });
+                                    }
+                                }
+                                User fb_user = new User(
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.FIRST_NAME_KEY),
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.LAST_NAME_KEY),
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.EMAIL_KEY),
+                                                new Location_fb(
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.STATE_KEY),
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.DISTRICT_KEY),
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.TALUKA_KEY),
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.PINCODE_KEY)),
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.MOBILE_KEY));
+
+                                mDatabase.child("users").child(user.getUid()).setValue(fb_user);
+                                //TODO:Add Same to FireStore if required
+
+                            }
+
+
+
+                            Log.d(LOG_TAG,user.getPhoneNumber().toString());
                             //TODO: Open The MainActivity and Send User object to That Activity
                             startActivity(intentForMainActivity);
                             finish();
                         } else {
                             // Sign in failed, display a message and update the UI
-                            Toast.makeText(getApplicationContext(),"Sign In Faild",Toast.LENGTH_LONG);
+                            Toast.makeText(getApplicationContext(),"Sign In Faild",Toast.LENGTH_LONG).show();
                             mProgressBar.setVisibility(View.GONE);
                             mLinearLayLogin.setVisibility(View.VISIBLE);
                             mLinearLayLoginVerify.setVisibility(View.GONE);
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
-                                Toast.makeText(getApplicationContext(),"verification code entered was invalid",Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(),"verification code entered was invalid",Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -151,7 +252,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void verifyPhoneNumber(){
+    private void verifyPhoneNumber(String phoneNumber){
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -163,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
                 // 2 - Auto-retrieval. On some devices Google Play services can automatically
                 //     detect the incoming verification SMS and perform verificaiton without
                 //     user action.
-                Log.d(TAG, "onVerificationCompleted:" + credential);
+                Log.d(LOG_TAG, "onVerificationCompleted:" + credential);
 
 
                 mVerificationCode.setText(credential.getSmsCode());
@@ -177,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onVerificationFailed(FirebaseException e) {
                 // This callback is invoked in an invalid request for verification is made,
                 // for instance if the the phone number format is not valid.
-                Log.w(TAG, "onVerificationFailed", e);
+                Log.w(LOG_TAG, "onVerificationFailed", e);
 
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
@@ -213,7 +314,7 @@ public class LoginActivity extends AppCompatActivity {
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
-                Log.d(TAG, "onCodeSent:" + verificationId);
+                Log.d(LOG_TAG, "onCodeSent:" + verificationId);
                 FLAG_PHONEVERFIY =true;
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId;
@@ -240,7 +341,7 @@ public class LoginActivity extends AppCompatActivity {
         mLinearLayLogin.setVisibility(View.GONE);
         mLinearLayLoginVerify.setVisibility(View.GONE);
 
-        String phoneNumber = mMobileNumber.getText().toString();
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 60,                 // Timeout duration
@@ -249,6 +350,23 @@ public class LoginActivity extends AppCompatActivity {
                 mCallbacks );        // OnVerificationStateChangedCallbacks
 
 
+    }
+
+    public void setDataFromReg(Intent dataFromReg) {
+        this.dataFromReg = dataFromReg;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == ACTIVITY_CONSTANT) {
+            if (data.hasExtra(UserRegistrationActivity.MOBILE_KEY)&& data.hasExtra(UserRegistrationActivity.FIRST_NAME_KEY)) {
+                setDataFromReg(data);
+                verifyPhoneNumber(data.getStringExtra(UserRegistrationActivity.MOBILE_KEY));
+
+            }
+        }
     }
 
     @Override

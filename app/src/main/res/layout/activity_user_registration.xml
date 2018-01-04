@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    tools:context="com.frosty.farmbuddy.Activities.UserRegistrationActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/et_reg_first_name"
+                android:hint="@string/first_name"
+                android:layout_width="110dp"
+                android:background="@drawable/shape_rectangle_round"
+                android:elevation="@dimen/elevation_less"
+                android:inputType="text"
+                android:layout_height="40dp" />
+            <EditText
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="40dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/et_reg_last_name"
+                android:hint="@string/last_name"
+                android:background="@drawable/shape_rectangle_round"
+                android:layout_width="110dp"
+                android:inputType="text"
+                android:elevation="@dimen/elevation_less"
+                 />
+        </LinearLayout>
+
+        <EditText
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/et_rg_email"
+            android:paddingLeft="5dp"
+            android:background="@drawable/shape_rectangle_round"
+            android:hint="@string/text_email"
+            android:inputType="textEmailAddress"
+            android:elevation="@dimen/elevation_less"
+            android:layout_width="240dp"
+             />
+        <EditText
+            android:layout_marginTop="30dp"
+
+            android:id="@+id/et_reg_phone"
+            android:paddingLeft="5dp"
+            android:background="@drawable/shape_rectangle_round"
+            android:hint="@string/text_mobile_number"
+            android:maxLength="10"
+            android:elevation="@dimen/elevation_less"
+            android:inputType="phone"
+            android:layout_width="240dp"
+            android:layout_height="40dp"/>
+        <FrameLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+
+            <EditText
+
+
+                android:id="@+id/et_reg_pincode"
+                android:layout_margin="5dp"
+                android:paddingLeft="5dp"
+                android:inputType="number"
+                android:maxLength="6"
+                android:background="@drawable/shape_rectangle_round"
+                android:hint="@string/text_pincode"
+                android:elevation="@dimen/elevation_less"
+                android:layout_width="240dp"
+                android:layout_height="40dp"/>
+
+            <ProgressBar
+               android:id="@+id/pb_pincode"
+                android:layout_margin="10dp"
+                android:elevation="5dp"
+                android:layout_gravity="end"
+                android:layout_width="30dp"
+                android:layout_height="30sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:visibility="invisible"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:padding="2dp"
+            android:background="@drawable/shape_rectangle_round"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        <Spinner
+            android:id="@+id/sp_reg_state"
+            android:layout_marginTop="30dp"
+            android:paddingStart="5dp"
+            android:layout_width="240dp"
+            android:layout_height="40dp"></Spinner>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:background="@color/white"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/sp_reg_district"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="30dp"
+                    android:paddingLeft="5dp"></Spinner>
+
+                <Spinner
+                    android:id="@+id/sp_reg_taluka"
+
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="30dp"
+                    android:paddingLeft="5dp"></Spinner>
+            </LinearLayout>
+
+
+
+            </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+
+
+    <TextView
+        android:id="@+id/tv_reg_register"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorSecondary"
+        android:elevation="@dimen/elevation_less"
+        android:paddingTop="14dp"
+        android:text="@string/text_register"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+
+
+</FrameLayout>
