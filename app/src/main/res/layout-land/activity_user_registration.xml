@@ -3,7 +3,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white_dark"
+    android:background="@color/white"
     android:layout_width="match_parent"
     tools:context="com.frosty.farmbuddy.Activities.UserRegistrationActivity">
     <ScrollView
@@ -85,17 +85,35 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-        <EditText
+            <FrameLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
 
-            android:id="@+id/et_reg_pincode"
-            android:paddingLeft="5dp"
-            android:inputType="number"
-            android:maxLength="6"
-            android:background="@drawable/shape_rectangle_round"
-            android:hint="@string/text_pincode"
-            android:elevation="@dimen/elevation_less"
-            android:layout_width="240dp"
-            android:layout_height="40dp"/>
+                android:layout_gravity="center"
+                android:layout_height="wrap_content">
+
+                <EditText
+
+
+                    android:id="@+id/et_reg_pincode"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="5dp"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:background="@drawable/shape_rectangle_round"
+                    android:hint="@string/text_pincode"
+                    android:elevation="@dimen/elevation_less"
+                    android:layout_width="240dp"
+                    android:layout_height="40dp"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_pincode"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:layout_gravity="end"
+                    android:layout_width="30dp"
+                    android:layout_height="30sp" />
+            </FrameLayout>
         <LinearLayout
             android:visibility="gone"
             android:layout_marginTop="20dp"

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.frosty.farmbuddy.MainActivity;
+import com.frosty.farmbuddy.Objects.Location_fb;
+import com.frosty.farmbuddy.Objects.User;
 import com.frosty.farmbuddy.R;
 import com.frosty.farmbuddy.Utility.Converter;
 import com.frosty.farmbuddy.Utility.FarmBuddyValues;
@@ -33,6 +35,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.frosty.farmbuddy.Activities.UserRegistrationActivity;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
     private Intent intentForMainActivity ;
     private final int ACTIVITY_CONSTANT = 1;
     private Intent dataFromReg;
+    private DatabaseReference mDatabase;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         mLinearLayLogin = (LinearLayout) findViewById(R.id.lineraLay_login_input);
         mLinearLayLoginVerify = (LinearLayout) findViewById(R.id.LinearLay_LoginVerify);
         mResendOtp = (TextView) findViewById(R.id.tv_resend_OTP);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         if(FLAG_PHONEVERFIY){
@@ -105,7 +117,23 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 //Verify mobile Number
                 else{
-                    verifyPhoneNumber(mMobileNumber.getText().toString());
+                    mDatabase.child("users").orderByChild("phone").equalTo(mMobileNumber.getText().toString()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue()==null){
+                                Log.d("TEST","onDataChange=>"+dataSnapshot.toString());
+                                startActivityForResult(new Intent(getApplicationContext(),UserRegistrationActivity.class),ACTIVITY_CONSTANT);
+                            }else{
+                                verifyPhoneNumber(mMobileNumber.getText().toString());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
         });
@@ -184,7 +212,24 @@ public class LoginActivity extends AppCompatActivity {
                                                 });
                                     }
                                 }
+                                User fb_user = new User(
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.FIRST_NAME_KEY),
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.LAST_NAME_KEY),
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.EMAIL_KEY),
+                                                new Location_fb(
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.STATE_KEY),
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.DISTRICT_KEY),
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.TALUKA_KEY),
+                                                        dataFromReg.getStringExtra(UserRegistrationActivity.PINCODE_KEY)),
+                                        dataFromReg.getStringExtra(UserRegistrationActivity.MOBILE_KEY));
+
+                                mDatabase.child("users").child(user.getUid()).setValue(fb_user);
+                                //TODO:Add Same to FireStore if required
+
                             }
+
+
+
                             Log.d(LOG_TAG,user.getPhoneNumber().toString());
                             //TODO: Open The MainActivity and Send User object to That Activity
                             startActivity(intentForMainActivity);

@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,12 +25,15 @@ import com.frosty.farmbuddy.WebApis.PincodeApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 public class UserRegistrationActivity extends AppCompatActivity {
     private EditText mEditTextFirstName;
     private EditText mEditTextLastName;
     private EditText mEditTextEmail;
     private EditText mEditTextMobileNo;
     private EditText mEditTextPincode;
+    private ProgressBar mProgressBarPincode;
     private Spinner  mSpinnerState;
     private Spinner  mSpinnerDistrict;
     private Spinner  mSpinnerTaluka;
@@ -38,6 +43,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private String state="";
     private String district="";
     private String taluka="";
+    private int textColor;
+    private int textHintColor;
+    private static final Pattern rfc2822 = Pattern.compile(
+            "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+    );
+    private boolean allInputsAreOkay;
+
 
     public static final String FIRST_NAME_KEY = "firstname";
     public static final String LAST_NAME_KEY = "lastname";
@@ -64,9 +76,65 @@ public class UserRegistrationActivity extends AppCompatActivity {
         mSpinnerTaluka= findViewById(R.id.sp_reg_taluka);
         mTextViewRegister= findViewById(R.id.tv_reg_register);
         mTextViewRegister.setClickable(false);
+        mProgressBarPincode = findViewById(R.id.pb_pincode);
+        mProgressBarPincode.setVisibility(View.GONE);
         mTextViewRegister.setBackgroundColor(getResources().getColor(R.color.colorSecondaryGray));
         data = new Intent();
+        textColor = mEditTextFirstName.getCurrentTextColor();
+        textHintColor = mEditTextFirstName.getCurrentHintTextColor();
 
+        mEditTextEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!rfc2822.matcher(s.toString()).matches() && s.length()>0 ){
+                    Log.d(LOG_TAG,"LENGTH = "+Integer.toString(s.length()) );
+                    mEditTextEmail.setHintTextColor(getResources().getColor(R.color.colorError));
+                    mEditTextEmail.setTextColor(getResources().getColor(R.color.colorError));
+                    allInputsAreOkay= allInputsAreOkay && false;
+                }else{
+                    mEditTextEmail.setHintTextColor(textHintColor);
+                    mEditTextEmail.setTextColor(textColor);
+                    allInputsAreOkay= allInputsAreOkay || true;
+                }
+
+            }
+        });
+
+        mEditTextMobileNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()<10 && s.length()>0 ){
+                    Log.d(LOG_TAG,"LENGTH = "+Integer.toString(s.length()) );
+                    mEditTextMobileNo.setHintTextColor(getResources().getColor(R.color.colorError));
+                    mEditTextMobileNo.setTextColor(getResources().getColor(R.color.colorError));
+                    allInputsAreOkay= allInputsAreOkay && false;
+                }else{
+                    mEditTextMobileNo.setHintTextColor(textHintColor);
+                    mEditTextMobileNo.setTextColor(textColor);
+                    allInputsAreOkay= allInputsAreOkay || true;
+                }
+            }
+        });
 
         mEditTextPincode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -85,7 +153,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(mEditTextPincode.getText().toString().length()==6){
-
+                    mProgressBarPincode.setVisibility(View.VISIBLE);
                     JsonObjectRequest jsObjRequest = new JsonObjectRequest
                             (Request.Method.GET,
                                     new PincodeApi().generateUrl(mEditTextPincode.getText().toString()),
@@ -102,6 +170,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                                 state = location.getString("statename");
                                                 district= location.getString("districtname");
                                                 taluka = location.getString("taluk");
+                                                mProgressBarPincode.setVisibility(View.GONE);
                                                 mTextViewRegister.setClickable(true);
                                                 mTextViewRegister.setBackgroundColor(getResources().getColor(R.color.colorSecondary));
 
@@ -121,6 +190,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
                                     });
                     VolleyNetwork.getInstance(getApplicationContext())
                             .addToRequestQueue(jsObjRequest);
+                }else{
+                    mProgressBarPincode.setVisibility(View.GONE);
                 }
 
             }
@@ -130,17 +201,39 @@ public class UserRegistrationActivity extends AppCompatActivity {
         mTextViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mEditTextFirstName.getText().toString().trim().length()<2 || mEditTextFirstName.getText().toString().trim()==""){
 
-                data.putExtra(FIRST_NAME_KEY,mEditTextFirstName.getText().toString());
-                data.putExtra(LAST_NAME_KEY,mEditTextLastName.getText().toString());
-                data.putExtra(PINCODE_KEY,mEditTextPincode.getText().toString());
-                data.putExtra(EMAIL_KEY,!mEditTextEmail.getText().toString().isEmpty()?mEditTextEmail.getText().toString():" ");
-                data.putExtra(MOBILE_KEY,mEditTextMobileNo.getText().toString());
-                data.putExtra(STATE_KEY,state);
-                data.putExtra(DISTRICT_KEY,district);
-                data.putExtra(TALUKA_KEY,taluka);
-                setResult(RESULT_OK,data);
-                finish();
+                    mEditTextFirstName.setHintTextColor(getResources().getColor(R.color.colorError));
+                    allInputsAreOkay= allInputsAreOkay && false;
+                }else{
+                    mEditTextFirstName.setHintTextColor(textColor);
+                    allInputsAreOkay= allInputsAreOkay || true;
+                }
+
+                if(mEditTextLastName.getText().toString().trim().length()<2 || mEditTextFirstName.getText().toString().trim()==""){
+
+                    mEditTextLastName.setHintTextColor(getResources().getColor(R.color.colorError));
+                    allInputsAreOkay= allInputsAreOkay && false;
+                }else{
+                    mEditTextLastName.setHintTextColor(textColor);
+                    allInputsAreOkay= allInputsAreOkay || true;
+                }
+
+        if(allInputsAreOkay){
+
+                    data.putExtra(FIRST_NAME_KEY,mEditTextFirstName.getText().toString());
+                    data.putExtra(LAST_NAME_KEY,mEditTextLastName.getText().toString());
+                    data.putExtra(PINCODE_KEY,mEditTextPincode.getText().toString());
+                    data.putExtra(EMAIL_KEY,!mEditTextEmail.getText().toString().isEmpty()?mEditTextEmail.getText().toString():" ");
+                    data.putExtra(MOBILE_KEY,mEditTextMobileNo.getText().toString());
+                    data.putExtra(STATE_KEY,state);
+                    data.putExtra(DISTRICT_KEY,district);
+                    data.putExtra(TALUKA_KEY,taluka);
+                    setResult(RESULT_OK,data);
+                    finish();
+                }else{
+            Toast.makeText(getApplicationContext(),"problem with some inputs",Toast.LENGTH_SHORT).show();
+        }
             }
         });
 
