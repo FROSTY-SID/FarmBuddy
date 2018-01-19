@@ -12,36 +12,38 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.Material.Light.Light.NoActionBar">
 
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-            <intent-filter>
+            android:theme="@style/Theme.FarmBuddy.Material.Light.Light"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            >
+
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".Activities.FragContainerEmptyActivity"
             android:launchMode="singleTop"
+            android:theme="@style/Theme.FarmBuddy.Material.Light.Light"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Activities.UserRegistrationActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".Activities.LoginActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/Theme.FarmBuddy.Material.Light.Light">
 
             <!--
             <intent-filter>
@@ -62,5 +64,7 @@
             </intent-filter>-->
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 </manifest>

@@ -36,4 +36,9 @@
     <string name="text_register">Register</string>
     <string name="text_pincode">Pin code</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="submit">submit</string>
+    <string name="img_info_location">Location icon</string>
+
+
 </resources>

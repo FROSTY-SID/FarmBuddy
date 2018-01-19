@@ -1,0 +1,52 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.frosty.farmbuddy.Fragments.SellFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_sell_commodity"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:hint="Commodity"/>
+        <EditText
+            android:id="@+id/et_sell_variety"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:hint="Variety"/>
+        <EditText
+            android:id="@+id/et_sell_unit"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:hint="Unit"/>
+        <EditText
+            android:id="@+id/et_sell_description"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:hint="Description"/>
+        <EditText
+            android:id="@+id/et_sell_rate"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:hint="Rate"/>
+
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="50dp" />
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="50dp" />
+
+        <Button
+            android:id="@+id/bt_sell_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"/>
+    </LinearLayout>
+
+</FrameLayout>

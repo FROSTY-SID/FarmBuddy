@@ -1,0 +1,405 @@
+
+<resources>
+    <string-array name="informationApis">
+        <item>---Info About---</item>
+        <item>Market Price (Mandi)</item>
+    </string-array>
+    <string-array name="priceArrival">
+        <item>Price</item>
+        <item>Arrival</item>
+        <item>Both</item>
+    </string-array>
+    <string-array name="commodity">
+       
+            <item  >--Select--</item>
+            <item >Ajwan</item>
+            <item >Alasande Gram</item>
+            <item >Almond(Badam)</item>
+            <item >Alsandikai</item>
+            <item >Amaranthus</item>
+            <item >Ambada Seed</item>
+            <item >Amla(Nelli Kai)</item>
+            <item >Amphophalus</item>
+            <item >Antawala</item>
+            <item >Anthorium</item>
+            <item >Apple</item>
+            <item >Apricot(Jardalu/Khumani)</item>
+            <item >Arecanut(Betelnut/Supari)</item>
+            <item >Arhar (Tur/Red Gram)</item>
+            <item >Arhar Dal(Tur Dal)</item>
+            <item >Ashgourd</item>
+            <item >Astera</item>
+            <item >Avare Dal</item>
+            <item >Bajra(Pearl Millet/Cumbu)</item>
+            <item >Balekai</item>
+            <item >Bamboo</item>
+            <item >Banana</item>
+            <item >Banana - Green</item>
+            <item >Barley (Jau)</item>
+            <item >Bay leaf (Tejpatta)</item>
+            <item >Beans</item>
+            <item >Beaten Rice</item>
+            <item >Beetroot</item>
+            <item >Bengal Gram Dal (Chana Dal)</item>
+            <item >Bengal Gram(Gram)</item>
+            <item >Ber(Zizyphus/Borehannu)</item>
+            <item >Betal Leaves</item>
+            <item >Betelnuts</item>
+            <item >Bhindi(Ladies Finger)</item>
+            <item >Big Gram</item>
+            <item >Binoula</item>
+            <item >Bitter gourd</item>
+            <item >Black Gram (Urd Beans)</item>
+            <item >Black Gram Dal (Urd Dal)</item>
+            <item >Black pepper</item>
+            <item >BOP</item>
+            <item >Borehannu</item>
+            <item >Bottle gourd</item>
+            <item >Bran</item>
+            <item >Brinjal</item>
+            <item >Broken Rice</item>
+            <item >Broomstick(Flower Broom)</item>
+            <item >Bull</item>
+            <item >Bullar</item>
+            <item >Bunch Beans</item>
+            <item >Butter</item>
+            <item >Cabbage</item>
+            <item >Calf</item>
+            <item >Camel Hair</item>
+            <item >Cane</item>
+            <item >Capsicum</item>
+            <item >Cardamoms</item>
+            <item >Carrot</item>
+            <item >Cashew Kernnel</item>
+            <item >Cashewnuts</item>
+            <item >Cashewnuts</item>
+            <item >Castor Oil</item>
+            <item >Castor Seed</item>
+            <item >Cauliflower</item>
+            <item >Chakotha</item>
+            <item >Chapparad Avare</item>
+            <item >Chennangi (Whole)</item>
+            <item >Chennangi Dal</item>
+            <item >Cherry</item>
+            <item >Chikoos(Sapota)</item>
+            <item >Chili Red</item>
+            <item >Chilly Capsicum</item>
+            <item >Chow Chow</item>
+            <item >Chrysanthemum</item>
+            <item >Chrysanthemum(Loose)</item>
+            <item >Cinamon(Dalchini)</item>
+            <item >Cloves</item>
+            <item >Cluster beans</item>
+            <item >Coca</item>
+            <item >Cock</item>
+            <item >Cocoa</item>
+            <item >Coconut</item>
+            <item >Coconut</item>
+            <item >Coconut Oil</item>
+            <item >Coconut Seed</item>
+            <item >Coffee</item>
+            <item >Colacasia</item>
+            <item >Copra</item>
+            <item >Coriander(Leaves)</item>
+            <item >Cornation</item>
+            <item >Corriander seed</item>
+            <item >Cotton</item>
+            <item >Cotton Seed</item>
+            <item >Cow</item>
+            <item >Cowpea (Lobia/Karamani)</item>
+            <item >Cowpea(Veg)</item>
+            <item >Cucumbar(Kheera)</item>
+            <item >Cummin Seed(Jeera)</item>
+            <item >Custard Apple (Sharifa)</item>
+            <item >Daila(Chandni)</item>
+            <item >Dal (Avare)</item>
+            <item >Dalda</item>
+            <item >Delha</item>
+            <item >Dhaincha</item>
+            <item >Drumstick</item>
+            <item >Dry Chillies</item>
+            <item >Dry Fodder</item>
+            <item >Dry Grapes</item>
+            <item >Duck</item>
+            <item >Duster Beans</item>
+            <item >Egg</item>
+            <item >Egypian Clover(Barseem)</item>
+            <item >Elephant Yam (Suran)</item>
+            <item >Field Pea</item>
+            <item >Fig(Anjura/Anjeer)</item>
+            <item >Firewood</item>
+            <item >Fish</item>
+            <item >Flower Broom</item>
+            <item >Foxtail Millet(Navane)</item>
+            <item >French Beans (Frasbean)</item>
+            <item >Galgal(Lemon)</item>
+            <item >Garlic</item>
+            <item >Ghee</item>
+            <item >Gingelly Oil</item>
+            <item >Ginger(Dry)</item>
+            <item >Ginger(Green)</item>
+            <item >Gladiolus Bulb</item>
+            <item >Gladiolus Cut Flower</item>
+            <item >Goat</item>
+            <item >Goat Hair</item>
+            <item >Gram Raw(Chholia)</item>
+            <item >Gramflour</item>
+            <item >Grapes</item>
+            <item >Green Avare (W)</item>
+            <item >Green Chilli</item>
+            <item >Green Fodder</item>
+            <item >Green Gram (Moong)</item>
+            <item >Green Gram Dal (Moong Dal)</item>
+            <item >Green Peas</item>
+            <item >Ground Nut Oil</item>
+            <item >Ground Nut Seed</item>
+            <item >Groundnut</item>
+            <item >Groundnut (Split)</item>
+            <item >Groundnut pods (raw)</item>
+            <item >Guar</item>
+            <item >Guar Seed(Cluster Beans Seed)</item>
+            <item >Guava</item>
+            <item >Gur(Jaggery)</item>
+            <item >Gurellu</item>
+            <item >Haralekai</item>
+            <item >He Buffalo</item>
+            <item >Hen</item>
+            <item >Hippe Seed</item>
+            <item >Honey</item>
+            <item >Honge seed</item>
+            <item >Hybrid Cumbu</item>
+            <item >Indian Beans (Seam)</item>
+            <item >Indian Colza(Sarson)</item>
+            <item >Isabgul (Psyllium)</item>
+            <item >Jack Fruit</item>
+            <item >Jaffri</item>
+            <item >Jaggery</item>
+            <item >Jamamkhan</item>
+            <item >Jamun(Narale Hannu)</item>
+            <item >Jarbara</item>
+            <item >Jasmine</item>
+            <item >Javi</item>
+            <item >Jowar(Sorghum)</item>
+            <item >Jute</item>
+            <item >Jute Seed</item>
+            <item >Kabuli Chana(Chickpeas-White)</item>
+            <item >Kacholam</item>
+            <item >Kakada</item>
+            <item >Kankambra</item>
+            <item >Karamani</item>
+            <item >Karbuja(Musk Melon)</item>
+            <item >Kartali (Kantola)</item>
+            <item >Kharif Mash</item>
+            <item >Khoya</item>
+            <item >Kinnow</item>
+            <item >Knool Khol</item>
+            <item >Kodo Millet(Varagu)</item>
+            <item >Kuchur</item>
+            <item >Kulthi(Horse Gram)</item>
+            <item >Ladies Finger</item>
+            <item >Lak(Teora)</item>
+            <item >Leafy Vegetable</item>
+            <item >Lemon</item>
+            <item >Lentil(Masur)</item>
+            <item >Lilly</item>
+            <item >Lime</item>
+            <item >Linseed</item>
+            <item >Lint</item>
+            <item >Litchi</item>
+            <item >Little gourd (Kundru)</item>
+            <item >Long Melon(Kakri)</item>
+            <item >Lotus</item>
+            <item >Lotus Sticks</item>
+            <item >Lukad</item>
+            <item >Mace</item>
+            <item >Mahedi</item>
+            <item >Mahua</item>
+            <item >Mahua Seed(Hippe seed)</item>
+            <item >Maida Atta</item>
+            <item >Maize</item>
+            <item >Mango</item>
+            <item >Mango (Raw-Ripe)</item>
+            <item >Maragensu</item>
+            <item >Marasebu</item>
+            <item >Marget</item>
+            <item >Marigold(Calcutta)</item>
+            <item >Marigold(loose)</item>
+            <item >Mash</item>
+            <item >Mashrooms</item>
+            <item >Masur Dal</item>
+            <item >Mataki</item>
+            <item >Methi Seeds</item>
+            <item >Methi(Leaves)</item>
+            <item >Millets</item>
+            <item >Mint(Pudina)</item>
+            <item >Moath Dal</item>
+            <item >Moath Dal</item>
+            <item >Mousambi(Sweet Lime)</item>
+            <item >Mustard</item>
+            <item >Mustard Oil</item>
+            <item >Myrobolan(Harad)</item>
+            <item >Nargasi</item>
+            <item >Nearle Hannu</item>
+            <item >Neem Seed</item>
+            <item >Nelli Kai</item>
+            <item >Niger Seed (Ramtil)</item>
+            <item >Nutmeg</item>
+            <item >Onion</item>
+            <item >Onion Green</item>
+            <item >Orange</item>
+            <item >Orchid</item>
+            <item >Other Pulses</item>
+            <item >Ox</item>
+            <item >Paddy(Dhan)</item>
+            <item >Papaya</item>
+            <item >Papaya (Raw)</item>
+            <item >Patti Calcutta</item>
+            <item >Peach</item>
+            <item >Pear(Marasebu)</item>
+            <item >Peas cod</item>
+            <item >Peas Wet</item>
+            <item >Peas(Dry)</item>
+            <item >Pegeon Pea (Arhar Fali)</item>
+            <item >Pepper garbled</item>
+            <item >Pepper ungarbled</item>
+            <item >Persimon(Japani Fal)</item>
+            <item >Pigs</item>
+            <item >Pine Apple</item>
+            <item >Plum</item>
+            <item >Pointed gourd (Parval)</item>
+            <item >Polherb</item>
+            <item >Pomegranate</item>
+            <item >Potato</item>
+            <item >Pumpkin</item>
+            <item >Pundi</item>
+            <item >Pundi Seed</item>
+            <item >Raddish</item>
+            <item >Ragi (Finger Millet)</item>
+            <item >Raibel</item>
+            <item >Rajgir</item>
+            <item >Ram</item>
+            <item >Rat Tail Radish (Mogari)</item>
+            <item >Raya</item>
+            <item >Red Gram</item>
+            <item >Resinwood</item>
+            <item >Riccbcan</item>
+            <item >Rice</item>
+            <item >Ridgeguard(Tori)</item>
+            <item >Rose(Local)</item>
+            <item >Rose(Loose)</item>
+            <item >Rose(Tata)</item>
+            <item >Round gourd</item>
+            <item >Rubber</item>
+            <item >Sabu Dan</item>
+            <item >Safflower</item>
+            <item >Saffron</item>
+            <item >Sajje</item>
+            <item >Same/Savi</item>
+            <item >Sarasum</item>
+            <item >Season Leaves</item>
+            <item >Seegu</item>
+            <item >Seemebadnekai</item>
+            <item >Seetapal</item>
+            <item >Sesamum(Sesame,Gingelly,Til)</item>
+            <item >She Buffalo</item>
+            <item >She Goat</item>
+            <item >Sheep</item>
+            <item >Siddota</item>
+            <item >Skin And Hide</item>
+            <item >Snakeguard</item>
+            <item >Soanf</item>
+            <item >Soapnut(Antawala/Retha)</item>
+            <item >Soji</item>
+            <item >Sompu</item>
+            <item >Soyabean</item>
+            <item >Spinach</item>
+            <item >Sponge gourd</item>
+            <item >Squash(Chappal Kadoo)</item>
+            <item >Sugar</item>
+            <item >Sugarcane</item>
+            <item >Sunflower</item>
+            <item >Sunflower Seed</item>
+            <item >Sunhemp</item>
+            <item >Suram</item>
+            <item >Surat Beans (Papadi)</item>
+            <item >Suva (Dill Seed)</item>
+            <item >Suvarna Gadde</item>
+            <item >Sweet Potato</item>
+            <item >Sweet Pumpkin</item>
+            <item >T.V. Cumbu</item>
+            <item >Tamarind Fruit</item>
+            <item >Tamarind Seed</item>
+            <item >Tapioca</item>
+            <item >Taramira</item>
+            <item >Tea</item>
+            <item >Tender Coconut</item>
+            <item >Thinai (Italian Millet)</item>
+            <item >Thogrikai</item>
+            <item >Thondekai</item>
+            <item >Tinda</item>
+            <item >Tobacco</item>
+            <item >Tomato</item>
+            <item >Torchwood</item>
+            <item >Toria</item>
+            <item >Tube Flower</item>
+            <item >Tube Rose(Double)</item>
+            <item >Tube Rose(Loose)</item>
+            <item >Tube Rose(Single)</item>
+            <item >Turmeric</item>
+            <item >Turmeric (raw)</item>
+            <item >Turnip</item>
+            <item >Walnut</item>
+            <item >Water Melon</item>
+            <item >Wheat</item>
+            <item >Wheat Atta</item>
+            <item >White Peas</item>
+            <item >White Pumpkin</item>
+            <item >Wood</item>
+            <item >Wool</item>
+            <item >Yam</item>
+            <item >Yam (Ratalu)</item>
+
+       
+    </string-array>
+    
+    <string-array name="state">
+        <item>---Select--</item>
+        <item >Andaman and Nicobar</item>
+        <item >Andhra Pradesh</item>
+        <item >Arunachal Pradesh</item>
+        <item >Assam</item>
+        <item >Bihar</item>
+        <item >Chandigarh</item>
+        <item >Chattisgarh</item>
+        <item >Dadra and Nagar Haveli</item>
+        <item >Daman and Diu</item>
+        <item >Goa</item>
+        <item >Gujarat</item>
+        <item >Haryana</item>
+        <item >Himachal Pradesh</item>
+        <item >Jammu and Kashmir</item>
+        <item >Jharkhand</item>
+        <item >Karnataka</item>
+        <item >Kerala</item>
+        <item >Lakshadweep</item>
+        <item >Madhya Pradesh</item>
+        <item >Maharashtra</item>
+        <item >Manipur</item>
+        <item >Meghalaya</item>
+        <item >Mizoram</item>
+        <item >Nagaland</item>
+        <item >NCT of Delhi</item>
+        <item >Orissa</item>
+        <item >Pondicherry</item>
+        <item >Punjab</item>
+        <item >Rajasthan</item>
+        <item >Sikkim</item>
+        <item >Tamil Nadu</item>
+        <item >Telangana</item>
+        <item >Tripura</item>
+        <item >Uttar Pradesh</item>
+        <item >Uttrakhand</item>
+        <item >West Bengal</item>
+    </string-array>
+
+</resources>
