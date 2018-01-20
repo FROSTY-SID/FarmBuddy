@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/item_pic_layout"
+    android:layout_margin="3dp"
+    android:elevation="@dimen/elevation_less"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="@drawable/shape_rectangle_round"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/image_view_item_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_rectangle_round"
+
+        android:src="@drawable/profilepic"/>
+</FrameLayout>

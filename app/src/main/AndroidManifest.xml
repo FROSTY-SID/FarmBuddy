@@ -35,7 +35,7 @@
         </activity>
         <activity
             android:name=".Activities.FragContainerEmptyActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.FarmBuddy.Material.Light.Light"
             android:parentActivityName=".MainActivity" />
         <activity

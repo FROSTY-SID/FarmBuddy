@@ -16,6 +16,7 @@
     <color name="text_color_primary">#ff8f00</color>
     <color name="accent_material_light">#f5b800</color>
     <color name="foreground_material_light">#f57c00</color>
+    <color name="backgroundLight_material_light">#ffdba0</color>
 </resources>
 <!--
 <color name="colorPrimary">#7cb342</color>
