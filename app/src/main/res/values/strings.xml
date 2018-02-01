@@ -39,6 +39,8 @@
     <string name="sign_out">Sign Out</string>
     <string name="submit">submit</string>
     <string name="img_info_location">Location icon</string>
+    <string name="my_shop">My Shop</string>
+    <string name="customers">Customers</string>
 
 
 </resources>

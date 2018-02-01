@@ -78,7 +78,7 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:drawingCacheQuality="high"
-                android:src="@drawable/profilepic"
+                android:src="@drawable/ic_profilpic"
                 app:civ_shadow="true"
                 app:civ_shadow_color="#d6d6d6"
                 app:civ_shadow_radius="5" />
@@ -149,12 +149,13 @@
     </LinearLayout>
 
     <TableLayout
-        android:layout_width="344dp"
-        android:layout_height="288dp"
+        android:layout_width="309dp"
+        android:layout_height="275dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="216dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -163,13 +164,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
+            android:id="@+id/table_row_seller"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/linearLayout_sell"
                 android:layout_width="60dp"
-                android:layout_height="71dp"
+                android:layout_height="75dp"
                 android:layout_column="1"
                 android:layout_margin="10dp"
                 android:layout_marginBottom="8dp"
@@ -177,20 +180,72 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/shape_rectangle_round"
-                android:elevation="@dimen/elevation_less"
+
                 android:gravity="center"
-                android:orientation="vertical"
-              >
+                android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/profilepic" />
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:src="@drawable/ic_sell" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="Sell" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_my_shop"
+                android:layout_width="78dp"
+                android:layout_height="75dp"
+                android:layout_column="2"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_rectangle_round"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:src="@drawable/ic_my_shop" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/my_shop" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_customers"
+                android:layout_width="78dp"
+                android:layout_height="75dp"
+                android:layout_column="2"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_rectangle_round"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:src="@drawable/ic_consumer_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/customers" />
             </LinearLayout>
 
         </TableRow>

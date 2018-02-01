@@ -24,6 +24,7 @@ import com.frosty.farmbuddy.Objects.User;
 import com.frosty.farmbuddy.R;
 import com.frosty.farmbuddy.Utility.Converter;
 import com.frosty.farmbuddy.Utility.FarmBuddyValues;
+import com.frosty.farmbuddy.Utility.FirebaseDatabaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         mLinearLayLogin = (LinearLayout) findViewById(R.id.lineraLay_login_input);
         mLinearLayLoginVerify = (LinearLayout) findViewById(R.id.LinearLay_LoginVerify);
         mResendOtp = (TextView) findViewById(R.id.tv_resend_OTP);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabaseUtil.getFirebaseDatabaseInstance().getReference();
 
 
         if(FLAG_PHONEVERFIY){

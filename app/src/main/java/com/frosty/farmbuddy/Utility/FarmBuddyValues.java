@@ -16,4 +16,7 @@ public class FarmBuddyValues {
     public static final String LOG_ACCOUNT_FRAGMENT_TAG = "ACCOUNT_FRAGMENT";
 
     public static final String FRAGMENT_SELL_TAG ="SELL_FRAGMENT" ;
+    public static final String FRAGMENT_MYSHOP_TAG ="MYSHOP_FRAGMENT";
+    public static final String FRAGMENT_PRODUCT_UPDATE_TAG ="FRAGMENT_PRODUCT_UPDATE";
+    public static final String FRAGMENT_NO_INTERNET_TAG = "FRAGMENT_NO_INTERNET";
 }

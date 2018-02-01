@@ -18,24 +18,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 import com.frosty.farmbuddy.Adapters.ProductImageAdapter;
 import com.frosty.farmbuddy.Objects.Product;
 import com.frosty.farmbuddy.R;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.frosty.farmbuddy.Utility.FirebaseDatabaseUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
@@ -45,14 +41,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.reginald.editspinner.EditSpinner;
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -78,6 +67,15 @@ public class SellFragment extends Fragment {
 
         return fragment;
     }
+    private static SellFragment sellFragment;
+
+    public static SellFragment getInstance(){
+        if(sellFragment==null){
+            sellFragment = new SellFragment();
+        }
+
+        return sellFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,11 +97,13 @@ public class SellFragment extends Fragment {
     private RecyclerView mRecyclerViewProductPics;
     private ProductImageAdapter mProductImageAdapter;
     private int PICK_IMAGE_REQUEST = 2;
-    private FirebaseStorage storage;
+    private StorageReference storageRef;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private ArrayList<String> productPicUrls;
+    private ArrayList<Uri> productPicLocalUris;
     private RoundCornerProgressBar mProgressBarProductPicUpload;
+    private StorageMetadata metadata;
 
 
     @Override
@@ -126,34 +126,44 @@ public class SellFragment extends Fragment {
         mProgressBarProductPicUpload.setMax(100);
         mProgressBarProductPicUpload.setVisibility(View.INVISIBLE);
 
-        storage = FirebaseStorage.getInstance();
+        storageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
         productPicUrls = new ArrayList<String>();
+        productPicLocalUris = new ArrayList<Uri>();
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
         mRecyclerViewProductPics.setLayoutManager(mLayoutManager);
-        mProductImageAdapter = new ProductImageAdapter(5);
+        mProductImageAdapter = new ProductImageAdapter(1);
         mRecyclerViewProductPics.setAdapter(mProductImageAdapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabaseUtil.getFirebaseDatabaseInstance().getReference();
         mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create the file metadata
                 Product p = new Product();
                 p.name = mEditTextCommodity.getText().toString();
+                p.cat = mEditTextCategory.getText().toString();
                 p.description=mEditTextDescription.getText().toString();
                 p.rate = mEditTextRate.getText().toString();
                 p.unit = mEditTextUnit.getText().toString();
-                p.varity = mEditTextVariety.getText().toString();
+                p.variety = mEditTextVariety.getText().toString();
                 if(!productPicUrls.isEmpty()){
                     p.productPicUrls = productPicUrls;
                 }
 
                 String pID = mDatabase.child("products").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey();
                 mDatabase.child("products").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(pID).setValue(p);
+
+                if(productPicLocalUris!=null?!productPicLocalUris.isEmpty():false){
+
+                  uploadProductPics(0,productPicLocalUris.size(),mDatabase.child("products").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(pID).getRef());
+                }
+
+
             }
         });
 
@@ -273,70 +283,63 @@ public class SellFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
             Log.d(TAG,"FILE URI :"+uri.toString());
+           productPicLocalUris.add(uri);
 
             //Uri file = Uri.fromFile(new File("path/to/mountains.jpg"));
+            mProductImageAdapter = new ProductImageAdapter( productPicLocalUris,getContext());
+            mRecyclerViewProductPics.setAdapter(mProductImageAdapter);
 
-            // Create the file metadata
-            StorageMetadata metadata = new StorageMetadata.Builder()
-                    .setCustomMetadata("uid",mUser.getUid())
-                    .setContentType("image/jpeg")
-                    .build();
-
-            // Upload file and metadata to the path 'images/mountains.jpg'
-            StorageReference storageRef  = storage.getReference();
-
-            UploadTask uploadTask = storageRef.child("product_pics/sell_product_pics/"+uri.getLastPathSegment()).putFile(uri, metadata);
-            mProgressBarProductPicUpload.setVisibility(View.VISIBLE);
-            // Listen for state changes, errors, and completion of the upload.
-            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                    mProgressBarProductPicUpload.setProgress((float)progress);
-                    Log.d(TAG,"Upload is " + progress + "% done");
-                }
-            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                    System.out.println("Upload is paused");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    mLinearLayoutUploadPic.setVisibility(View.INVISIBLE);
-                    // Handle unsuccessful uploads
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-
-                    mProgressBarProductPicUpload.setVisibility(View.INVISIBLE);
-                    productPicUrls.add(taskSnapshot.getMetadata().getDownloadUrl().toString());
-                    mProductImageAdapter = new ProductImageAdapter(productPicUrls,getContext());
-                    mRecyclerViewProductPics.setAdapter(mProductImageAdapter);
-
-
-                    /*// Handle successful uploads on complete
-                    Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
-                    setProfileImage(downloadUrl.toString());
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setPhotoUri(downloadUrl)
-                            .build();
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "User profile updated.");
-                                    }
-                                }
-                            });*/
-
-                }
-            });
         }
 
+    }
+
+    void uploadProductPics(final int i,final int size,final DatabaseReference databaseReference){
+
+        metadata = null;
+        metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("uid",mUser.getUid())
+                .setContentType("image/jpeg")
+                .build();
+        // Upload file and metadata to the path 'images/mountains.jpg'
+        UploadTask uploadTask = storageRef.child("product_pics/sell_product_pics/"+productPicLocalUris.get(i).getLastPathSegment()).putFile(productPicLocalUris.get(i), metadata);
+        mProgressBarProductPicUpload.setVisibility(View.VISIBLE);
+        // Listen for state changes, errors, and completion of the upload.
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                mProgressBarProductPicUpload.setProgress((float)progress);
+                Log.d(TAG,"Upload is " + progress + "% done");
+            }
+        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                System.out.println("Upload is paused");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                mLinearLayoutUploadPic.setVisibility(View.INVISIBLE);
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+
+                mProgressBarProductPicUpload.setVisibility(View.INVISIBLE);
+                productPicUrls.add(taskSnapshot.getMetadata().getDownloadUrl().toString());
+                if((i+1)<size){
+                    uploadProductPics(i + 1, size,databaseReference);
+                }else{
+                    databaseReference.child("productPicUrls").setValue(productPicUrls);
+                }
+
+
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

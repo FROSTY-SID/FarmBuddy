@@ -20,6 +20,7 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.frosty.farmbuddy.Objects.Location_fb;
 import com.frosty.farmbuddy.R;
 import com.frosty.farmbuddy.Utility.FarmBuddyValues;
+import com.frosty.farmbuddy.Utility.FirebaseDatabaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,7 +65,9 @@ public class AccountFragment extends Fragment {
     private DatabaseReference mDatabase;
     private Location_fb mUserLocation;
     private LinearLayout mLinearLayoutSell;
+    private LinearLayout mLinearLayoutMyShop;
     private FragmentManager mFragmentManager;
+    private static AccountFragment accountFragment;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -75,6 +78,13 @@ public class AccountFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static AccountFragment getInstance(){
+        if(accountFragment==null){
+            accountFragment = new AccountFragment();
+        }
+        return accountFragment;
     }
 
     @Override
@@ -91,7 +101,7 @@ public class AccountFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabaseUtil.getFirebaseDatabaseInstance().getReference();
         mFragmentManager = getFragmentManager();
 
         mTextViewEmail = (TextView) view.findViewById(R.id.tv_account_email) ;
@@ -101,6 +111,7 @@ public class AccountFragment extends Fragment {
         mImageViewAccount =  view.findViewById(R.id.im_account_pic);
         mLinearLayoutProfilePicUpload = view.findViewById(R.id.linear_layout_upload_profile_pic);
         mLinearLayoutSell = view.findViewById(R.id.linearLayout_sell);
+        mLinearLayoutMyShop = view.findViewById(R.id.linearLayout_my_shop);
 
         mTextViewEmail.setText(user!=null?user.getEmail():"...");
         mTextViewName.setText(user!=null?user.getDisplayName():"...");
@@ -147,7 +158,18 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = mFragmentManager.beginTransaction();
-                ft.replace(R.id.empty_activity_layout_for_fragment,new SellFragment(), FarmBuddyValues.FRAGMENT_SELL_TAG);
+                ft.replace(R.id.empty_activity_layout_for_fragment,SellFragment.getInstance(), FarmBuddyValues.FRAGMENT_SELL_TAG);
+                ft.addToBackStack(FarmBuddyValues.FRAGMENT_SELL_TAG);
+                ft.commit();
+            }
+        });
+
+        mLinearLayoutMyShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = mFragmentManager.beginTransaction();
+                ft.replace(R.id.empty_activity_layout_for_fragment,MyShopFragment.getInstant(), FarmBuddyValues.FRAGMENT_MYSHOP_TAG);
+                ft.addToBackStack(FarmBuddyValues.FRAGMENT_MYSHOP_TAG);
                 ft.commit();
             }
         });
