@@ -86,7 +86,7 @@ public class MyShopFragment extends Fragment {
         mRecyclerViewForProducts.setLayoutManager(mLinearLayoutManager);
 
         FirebaseRecyclerOptions<Product> options = new FirebaseRecyclerOptions.Builder<Product>()
-                        .setQuery(mUsersProductsRef.limitToFirst(50),Product.class)
+                        .setQuery(mUsersProductsRef,Product.class)
                         .build();
 
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Product, FireBaseMyShopViewHolder>(options) {

@@ -18,10 +18,13 @@
 
         <TableLayout
             android:id="@+id/home_catagories_table_layout"
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:background="#f7f7f7"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="#f7f7f7"
+            android:background="@drawable/shape_rectangle_round"
+            android:elevation="@dimen/elevation_less"
             android:orientation="vertical">
 
             <TableRow
@@ -42,28 +45,29 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
                 android:gravity="center_horizontal"
                 android:layout_height="match_parent" >
                 <LinearLayout
 
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
                 <LinearLayout
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
                 <LinearLayout
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
             </TableRow>
@@ -72,27 +76,28 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent" >
                 <LinearLayout
 
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
                 <LinearLayout
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
                 <LinearLayout
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
             </TableRow>
@@ -101,27 +106,28 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
+                android:layout_margin="5dp"
                 android:layout_height="match_parent" >
                 <LinearLayout
 
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
                 <LinearLayout
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
                 <LinearLayout
-                    android:layout_height="100dp"
+                    android:layout_height="80dp"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:orientation="vertical"
                     android:background="#ffff"/>
             </TableRow>
