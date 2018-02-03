@@ -2,6 +2,7 @@ package com.frosty.farmbuddy.WebApis;
 
 
 public class DataGovInApi {
+    //Request Values
     public static final String APIKEY="579b464db66ec23bdd000001e36e755de2d944225b6db5f2bac4a0cb";
     public static final String APIKEY_TAG="api-key=";
     public static final String FORMAT_TAG= "format=";
@@ -23,6 +24,11 @@ public class DataGovInApi {
     public String SORT  ="";
     public String LIMIT ="";
     public String OFFSET ="";
+
+
+    //Respond Values
+
+
 
     DataGovInApi(){
 

@@ -1,137 +1,255 @@
 package com.frosty.farmbuddy.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.frosty.farmbuddy.Objects.Location_fb;
 import com.frosty.farmbuddy.R;
 import com.frosty.farmbuddy.Utility.FarmBuddyValues;
+import com.frosty.farmbuddy.Utility.FirebaseDatabaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AccountFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AccountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import static android.app.Activity.RESULT_OK;
+
+
 public class AccountFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
-    public AccountFragment() {
-        // Required empty public constructor
-    }
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     private TextView mTextViewEmail;
     private TextView mTextViewName;
     private TextView mTextViewAddress;
+    private CircularImageView mImageViewAccount;
     private TextView mTextViewPhone;
     private TextView mTextViewUpdateInfo;
     private static String NO_TEXT = ".....";
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private final static String TAG ="ACC_FRAG";
     private View view ;
+    private FirebaseStorage storage;
+    private LinearLayout mLinearLayoutProfilePicUpload;
+    private int PICK_IMAGE_REQUEST = 1;
+    private DatabaseReference mDatabase;
+    private Location_fb mUserLocation;
+    private LinearLayout mLinearLayoutSell;
+    private LinearLayout mLinearLayoutMyShop;
+    private FragmentManager mFragmentManager;
+    private static AccountFragment accountFragment;
+
+    public AccountFragment() {
+        // Required empty public constructor
+    }
+
+    public static AccountFragment newInstance() {
+        AccountFragment fragment = new AccountFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static AccountFragment getInstance(){
+        if(accountFragment==null){
+            accountFragment = new AccountFragment();
+        }
+        return accountFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
     }
 
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-          view  = inflater.inflate(R.layout.fragment_account,container);
 
-        // Inflate the layout for this fragment
+        view  = inflater.inflate(R.layout.fragment_account, container, false);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        storage = FirebaseStorage.getInstance();
+        mDatabase = FirebaseDatabaseUtil.getFirebaseDatabaseInstance().getReference();
+        mFragmentManager = getFragmentManager();
+
         mTextViewEmail = (TextView) view.findViewById(R.id.tv_account_email) ;
         mTextViewName = (TextView)view.findViewById(R.id.tv_account_name);
         mTextViewAddress = (TextView)view.findViewById(R.id.tv_account_address);
         mTextViewPhone = (TextView)view.findViewById(R.id.tv_account_phone);
-        mTextViewUpdateInfo = (TextView)view.findViewById(R.id.tv_update_accinfo);
+        mImageViewAccount =  view.findViewById(R.id.im_account_pic);
+        mLinearLayoutProfilePicUpload = view.findViewById(R.id.linear_layout_upload_profile_pic);
+        mLinearLayoutSell = view.findViewById(R.id.linearLayout_sell);
+        mLinearLayoutMyShop = view.findViewById(R.id.linearLayout_my_shop);
 
-        if(mTextViewEmail!=null) {
-            Log.d(FarmBuddyValues.LOG_ACCOUNT_FRAGMENT_TAG,"GOT TEXT VIEW" );
-        }else{
-            Log.d(FarmBuddyValues.LOG_ACCOUNT_FRAGMENT_TAG,"DIDN'T GET TEXT VIEW" );
-        }
-
-        //TODO: Get Address form database or Firestore using query (user.uid as parameter)
         mTextViewEmail.setText(user!=null?user.getEmail():"...");
         mTextViewName.setText(user!=null?user.getDisplayName():"...");
         mTextViewPhone.setText(user!=null?user.getPhoneNumber():"...");
 
-       /* mTextViewUpdateInfo.setOnClickListener(new View.OnClickListener() {
+        mDatabase.child("users").child(user.getUid()).child("location").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                container.removeAllViews();
-                ft.remove(getFragmentManager().findFragmentById(R.id.empty_activity_layout_for_fragment))
-                        .addToBackStack(null)
-                        .replace(R.id.empty_activity_layout_for_fragment, new UpdateAccountFragment())
-                        .commit();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mUserLocation = dataSnapshot.getValue(Location_fb.class);
+                Log.d(TAG, "Location : " + dataSnapshot.toString());
+                if (mUserLocation != null) {
+                    mTextViewAddress.setText(mUserLocation.taluka + ", " + mUserLocation.district + ", " + mUserLocation.state + ".");
 
+                }
             }
-        });*/
-
-       //Temporary
-        mTextViewUpdateInfo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                auth.signOut();
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        if(user.getPhotoUrl()!=null) {
+            Log.d(TAG,"Photo URL :"+user.getPhotoUrl().toString());
+            StorageReference gsReference = storage.getReferenceFromUrl(user.getPhotoUrl().toString());
+            Glide.with(this /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(gsReference)
+                    .into(mImageViewAccount);
+        }
+
+
+
+        mLinearLayoutProfilePicUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Picture"),PICK_IMAGE_REQUEST);
+            }
+        });
+
+        mLinearLayoutSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = mFragmentManager.beginTransaction();
+                ft.replace(R.id.empty_activity_layout_for_fragment,SellFragment.getInstance(), FarmBuddyValues.FRAGMENT_SELL_TAG);
+                ft.addToBackStack(FarmBuddyValues.FRAGMENT_SELL_TAG);
+                ft.commit();
+            }
+        });
+
+        mLinearLayoutMyShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = mFragmentManager.beginTransaction();
+                ft.replace(R.id.empty_activity_layout_for_fragment,MyShopFragment.getInstant(), FarmBuddyValues.FRAGMENT_MYSHOP_TAG);
+                ft.addToBackStack(FarmBuddyValues.FRAGMENT_MYSHOP_TAG);
+                ft.commit();
+            }
+        });
+
+        return view;
+    }
+
+    void setProfileImage(String url){
+
+        StorageReference gsReference = storage.getReferenceFromUrl(url);
+        Glide.with(this /* context */)
+                .using(new FirebaseImageLoader())
+                .load(gsReference)
+                .into(mImageViewAccount);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+            Log.d(TAG,"FILE URI :"+uri.toString());
+
+            //Uri file = Uri.fromFile(new File("path/to/mountains.jpg"));
+
+        // Create the file metadata
+           StorageMetadata metadata = new StorageMetadata.Builder()
+                    .setContentType("image/jpeg")
+                    .build();
+
+        // Upload file and metadata to the path 'images/mountains.jpg'
+            StorageReference storageRef  = storage.getReference();
+
+            UploadTask uploadTask = storageRef.child("profile_pics/"+uri.getLastPathSegment()).putFile(uri, metadata);
+
+        // Listen for state changes, errors, and completion of the upload.
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    Log.d(TAG,"Upload is " + progress + "% done");
+                }
+            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Upload is paused");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Handle successful uploads on complete
+                    Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+                    setProfileImage(downloadUrl.toString());
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setPhotoUri(downloadUrl)
+                            .build();
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "User profile updated.");
+                                    }
+                                }
+                            });
+
+                }
+            });
+        }
     }
 
 
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -153,19 +271,9 @@ public class AccountFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

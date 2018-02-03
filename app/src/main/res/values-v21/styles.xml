@@ -5,4 +5,12 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.FarmBuddy.Material.Light.Light" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:colorAccent">@color/accent_material_light</item>
+        <item name="android:colorForeground">@color/foreground_material_light</item>
+        <item name="android:navigationBarColor">?android:attr/textColorPrimaryNoDisable</item>
+        <item name="android:statusBarColor">?android:attr/colorAccent</item>
+        <item name="android:textColorPrimaryInverse">@color/black</item>
+    </style>
 </resources>
